@@ -1,63 +1,65 @@
-"use client";
+/* ================================================================== */
+/*  Shared bits                                                       */
+/* ================================================================== */
 
-import { useEffect, useState, useRef } from "react";
+function WavyArrow({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 46 16"
+      className={className}
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M1 8 Q 4 3 7 8 T 13 8 T 19 8 T 25 8 T 31 8"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+      <path d="M32 3 L40 8 L32 13" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
-/* ------------------------------------------------------------------ */
-/*  Intersection Observer hook                                          */
-/* ------------------------------------------------------------------ */
-function useInView(threshold = 0.1) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) { setInView(true); obs.unobserve(el); }
-      },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return { ref, inView };
+function SectionTitle({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex items-center gap-3 text-[#2a2a2a]">
+      <WavyArrow className="w-12 shrink-0 text-[#2a2a2a]/70" />
+      <h2 className="text-2xl sm:text-[28px] font-extrabold tracking-tight">
+        {children}
+      </h2>
+    </div>
+  );
 }
 
 /* ================================================================== */
-/*  NAVIGATION BAR                                                      */
+/*  HEADER                                                             */
 /* ================================================================== */
-function NavigationBar() {
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const h = () => setScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", h, { passive: true });
-    return () => window.removeEventListener("scroll", h);
-  }, []);
 
+function Header() {
   return (
-    <header
-      className={`sticky top-0 z-50 border-b transition-all duration-300 ${
-        scrolled ? "bg-white/95 shadow-sm border-slate-200" : "bg-white border-slate-200"
-      }`}
-    >
-      <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-        {/* Left: Brand */}
-        <span className="text-3xl font-bold text-slate-900 tracking-tight">Demo 1</span>
+    <header className="relative border-b border-[#d5d5e0]">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-4 sm:py-5 flex flex-wrap items-center justify-between gap-x-8 gap-y-3">
+        {/* Left brand */}
+        <span className="text-[26px] sm:text-3xl font-extrabold tracking-tight text-[#2a2a2a]">
+          Demo 1
+        </span>
 
-        {/* Center: D logo */}
-        <div className="w-10 h-10 rounded-full border-2 border-slate-700 flex items-center justify-center font-bold text-slate-800 text-lg">
-          D
+        {/* Center circular D emblem */}
+        <div className="hidden sm:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-11 h-11 rounded-full border-2 border-[#2a2a2a] items-center justify-center">
+          <span className="text-lg font-bold text-[#2a2a2a]">D</span>
         </div>
 
-        {/* Right: Nav links */}
-        <nav className="flex items-center gap-1 text-sm font-medium text-slate-600">
-          <a href="#hero" className="hover:text-slate-900 transition-colors">Home</a>
-          <span className="text-slate-400 mx-1">→</span>
-          <a href="#about" className="hover:text-slate-900 transition-colors">About us</a>
-          <span className="text-slate-400 mx-1">→</span>
-          <a href="#services" className="hover:text-slate-900 transition-colors">service</a>
-          <span className="text-slate-400 mx-1">→</span>
-          <a href="#contact" className="hover:text-slate-900 transition-colors">contact</a>
+        {/* Right nav links joined by arrows */}
+        <nav className="flex items-center gap-1.5 text-sm sm:text-[15px] font-semibold text-[#2a2a2a]/75 w-full sm:w-auto order-3 sm:order-none justify-center sm:justify-end flex-wrap">
+          <a href="#hero" className="hover:text-[#2a2a2a] transition-colors">Home</a>
+          <span className="text-[#2a2a2a]/30">→</span>
+          <a href="#about" className="hover:text-[#2a2a2a] transition-colors">About us</a>
+          <span className="text-[#2a2a2a]/30">→</span>
+          <a href="#services" className="hover:text-[#2a2a2a] transition-colors">service</a>
+          <span className="text-[#2a2a2a]/30">→</span>
+          <a href="#contact" className="hover:text-[#2a2a2a] transition-colors">contact</a>
         </nav>
       </div>
     </header>
@@ -65,383 +67,281 @@ function NavigationBar() {
 }
 
 /* ================================================================== */
-/*  HERO SECTION                                                        */
+/*  HERO                                                               */
 /* ================================================================== */
+
 function HeroSection() {
-  const { ref, inView } = useInView(0.05);
-
   return (
-    <section
-      id="hero"
-      ref={ref}
-      className="bg-slate-100 border-b border-slate-200 overflow-hidden"
-    >
-      <div className="max-w-5xl mx-auto px-6 py-12 grid grid-cols-2 gap-0 items-stretch min-h-[340px]">
-
-        {/* LEFT COLUMN */}
-        <div className={`flex flex-col justify-center space-y-4 pr-8 transition-all duration-700 ${inView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-6"}`}>
-          {/* Arrows scatter */}
-          <div className="relative h-12 w-48">
-            <span className="absolute top-0 left-4 text-slate-600 text-lg font-bold rotate-[-30deg]">↗</span>
-            <span className="absolute top-0 left-10 text-slate-600 text-lg font-bold rotate-[20deg]">↗</span>
-            <span className="absolute top-1 left-16 text-slate-600 text-lg font-bold rotate-[-10deg]">↖</span>
-            <span className="absolute top-0 left-24 text-slate-600 text-lg font-bold rotate-[35deg]">↗</span>
-            <span className="absolute top-2 left-32 text-slate-600 text-lg font-bold rotate-[-25deg]">↙</span>
+    <section id="hero" className="border-b border-[#d5d5e0]">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-20 grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-6 items-center">
+        {/* ---------- LEFT COLUMN ---------- */}
+        <div className="flex flex-col items-center md:items-start justify-center gap-4">
+          {/* three arrows radiating up/outward from "test" */}
+          <div className="relative w-44 h-12">
+            <span className="absolute left-[6px] top-[26px] text-lg text-[#2a2a2a]/80 font-bold">↖</span>
+            <span className="absolute left-[76px] top-0 text-lg text-[#2a2a2a] font-bold">↑</span>
+            <span className="absolute right-[6px] top-[26px] text-lg text-[#2a2a2a]/80 font-bold">↗</span>
           </div>
 
-          {/* test label */}
-          <p className="font-black text-slate-800 text-base -mt-2">test</p>
+          <p className="text-4xl sm:text-[44px] font-black tracking-tight text-[#2a2a2a] leading-none">
+            test
+          </p>
 
-          {/* Malayalam headline */}
-          <h1 className="text-2xl font-extrabold text-slate-900 leading-snug">
+          <p className="text-xl sm:text-2xl font-bold text-[#2a2a2a] leading-snug">
             എന്താണ് ബിസിനസ്സ് അറിയാൻ
-          </h1>
+          </p>
 
-          {/* Question marks */}
-          <div className="flex items-center gap-3 text-slate-700">
-            {["↓","↓","↓","↓","↓"].map((a, i) => (
-              <span key={i} className="text-base text-slate-500">{a}</span>
-            ))}
+          {/* three downward arrows pointing at five question marks */}
+          <div className="mt-2 grid grid-cols-5 w-40">
+            <span className="text-center text-lg text-[#2a2a2a]/85">↓</span>
+            <span />
+            <span className="text-center text-lg text-[#2a2a2a]/85">↓</span>
+            <span />
+            <span className="text-center text-lg text-[#2a2a2a]/85">↓</span>
           </div>
-          <div className="flex items-center gap-4 text-xl font-bold text-slate-700">
-            <span>?</span><span>?</span><span>?</span><span>?</span><span>?</span>
+          <div className="grid grid-cols-5 w-40">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <span key={i} className="text-center text-2xl font-extrabold text-[#2a2a2a]">
+                ?
+              </span>
+            ))}
           </div>
         </div>
 
-        {/* RIGHT COLUMN */}
-        <div className={`relative flex flex-col justify-center transition-all duration-700 delay-200 ${inView ? "opacity-100 translate-x-0" : "opacity-0 translate-x-6"}`}>
+        {/* ---------- CENTER COLUMN: double-outlined chevron ---------- */}
+        <div className="flex justify-center">
+          <svg
+            viewBox="0 0 300 240"
+            className="w-[260px] sm:w-[300px] max-w-full h-auto"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <pattern id="chevFill" patternUnits="userSpaceOnUse" width="24" height="24">
+                <rect width="24" height="24" fill="#E8E8F2" />
+                <path d="M4 5 L12 12 L4 19" fill="none" stroke="#2a2a2a" strokeOpacity="0.5" strokeWidth="1.6" strokeLinecap="round" />
+                <path d="M12 5 L20 12 L12 19" fill="none" stroke="#2a2a2a" strokeOpacity="0.25" strokeWidth="1.4" strokeLinecap="round" />
+              </pattern>
+            </defs>
+            {/* outer chevron (charcoal silhouette, pointing right) */}
+            <polygon points="30,18 288,120 30,222" fill="#2a2a2a" />
+            {/* hollow inner opening filled with nested small chevrons */}
+            <polygon points="95,74 212,120 95,166" fill="url(#chevFill)" />
+            {/* inner outline (second parallel band edge) */}
+            <polygon
+              points="95,74 212,120 95,166"
+              fill="none"
+              stroke="#2a2a2a"
+              strokeOpacity="0.55"
+              strokeWidth="1.4"
+            />
+          </svg>
+        </div>
 
-          {/* Keywords top */}
-          <div className="flex items-end justify-end gap-3 mb-3">
-            {["↑","↑","↑","↑","↑","↑"].map((a,i) => (
-              <span key={i} className="text-slate-600 font-bold text-lg">{a}</span>
+        {/* ---------- RIGHT COLUMN ---------- */}
+        <div className="flex flex-col items-center justify-center gap-10">
+          {/* six upward arrows in a row */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {[0, 1, 2, 3, 4, 5].map((i) => (
+              <span key={i} className="text-lg sm:text-xl text-[#2a2a2a] font-bold">
+                ↑
+              </span>
             ))}
-            <span className="text-sm font-semibold text-slate-600 ml-1">keywords</span>
           </div>
+          <p className="text-sm font-semibold text-[#2a2a2a]/80 -mt-6">keywords</p>
 
-          {/* Big Chevron/Arrow shape — striped */}
-          <div className="relative flex items-center justify-center my-2">
-            <svg viewBox="0 0 280 160" className="w-full max-w-xs" xmlns="http://www.w3.org/2000/svg">
-              {/* Striped chevron */}
-              <defs>
-                <pattern id="chevStripe" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(45)">
-                  <rect width="5" height="10" fill="#64748b" opacity="0.5"/>
-                  <rect x="5" width="5" height="10" fill="#94a3b8" opacity="0.2"/>
-                </pattern>
-              </defs>
-              {/* Chevron shape */}
-              <polygon
-                points="0,0 160,0 280,80 160,160 0,160 120,80"
-                fill="url(#chevStripe)"
-                stroke="#475569"
-                strokeWidth="1.5"
-              />
-              {/* Inner outline chevron */}
-              <polygon
-                points="20,20 150,20 250,80 150,140 20,140 130,80"
+          <div className="h-10" />
+
+          <p className="text-sm font-semibold text-[#2a2a2a]/80">keywords</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ================================================================== */
+/*  ABOUT US                                                           */
+/* ================================================================== */
+
+function AboutSection() {
+  return (
+    <section id="about" className="relative border-b border-[#d5d5e0] overflow-hidden">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-16 relative">
+        {/* watermark top-right */}
+        <div className="absolute right-2 sm:right-6 top-2 sm:top-4 text-right pointer-events-none select-none">
+          <p className="text-[11px] sm:text-xs font-medium text-[#2a2a2a]/40">water mark</p>
+          <p className="text-[11px] text-[#2a2a2a]/35 mt-0.5">↓</p>
+          <p className="text-[72px] sm:text-[96px] font-black leading-none text-[#2a2a2a]/[0.06] mt-1">
+            Demo
+          </p>
+        </div>
+
+        <div className="relative z-10">
+          <SectionTitle>About US</SectionTitle>
+          <p className="mt-2 ml-[60px] text-base sm:text-lg font-semibold text-[#2a2a2a]/70">demo</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ================================================================== */
+/*  MY SERVICES                                                        */
+/* ================================================================== */
+
+function ServicesSection() {
+  return (
+    <section id="services" className="relative border-b border-[#d5d5e0] overflow-hidden">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-16 relative">
+        {/* heading row with caption text on the right */}
+        <div className="flex flex-wrap items-start justify-between gap-x-10 gap-y-3">
+          <SectionTitle>my services</SectionTitle>
+
+          {/* top-right text, curved arrow after it */}
+          <div className="flex items-start gap-2 text-[13px] font-medium text-[#2a2a2a]/60 text-right max-w-[210px]">
+            <span className="leading-snug pt-0.5">Arrangement position change to animation</span>
+            <svg
+              viewBox="0 0 26 30"
+              className="w-5 h-6 shrink-0 mt-0.5 text-[#2a2a2a]/60"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M3 24 C 3 10 10 2 22 6"
                 fill="none"
-                stroke="#64748b"
-                strokeWidth="1.5"
-                opacity="0.5"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
               />
+              <path d="M14 2 L23 6 L18 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
-
-          {/* Keywords middle right */}
-          <div className="flex items-center justify-end mt-2">
-            <span className="text-sm font-semibold text-slate-600">keywords</span>
-          </div>
         </div>
 
+        {/* cards + curved arrows */}
+        <div className="relative mt-12">
+          {/* curved arrow from the heading down to card 1 */}
+          <svg
+            viewBox="0 0 1000 180"
+            preserveAspectRatio="none"
+            className="absolute left-0 right-0 -top-12 h-40 sm:h-44 w-full pointer-events-none"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* heading -> card 1 */}
+            <path
+              d="M 120 6 C 150 30 40 60 165 68"
+              fill="none"
+              stroke="#2a2a2a"
+              strokeOpacity="0.55"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              vectorEffect="non-scaling-stroke"
+            />
+            <path
+              d="M 158 59 L 165 68 L 158 75"
+              fill="none"
+              stroke="#2a2a2a"
+              strokeOpacity="0.55"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              vectorEffect="non-scaling-stroke"
+            />
+            {/* curved arrow over cards 1–2 */}
+            <path
+              d="M 220 60 C 300 6 540 6 700 44 C 770 62 810 58 838 62"
+              fill="none"
+              stroke="#2a2a2a"
+              strokeOpacity="0.5"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              vectorEffect="non-scaling-stroke"
+            />
+            <path
+              d="M 826 54 L 837 62 L 828 71"
+              fill="none"
+              stroke="#2a2a2a"
+              strokeOpacity="0.5"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              vectorEffect="non-scaling-stroke"
+            />
+          </svg>
+
+          {/* three cards */}
+          <div className="grid grid-cols-3 gap-4 sm:gap-5">
+            <div className="h-36 sm:h-44 rounded-2xl bg-[#c9cad6] shadow-[0_2px_8px_rgba(42,42,42,0.08)]" />
+            <div className="h-36 sm:h-44 rounded-2xl bg-[#c9cad6] shadow-[0_2px_8px_rgba(42,42,42,0.08)] flex items-center justify-center">
+              <span className="text-[13px] font-medium text-[#2a2a2a]/40">water mark →</span>
+            </div>
+            <div className="h-36 sm:h-44 rounded-2xl bg-[#c9cad6] shadow-[0_2px_8px_rgba(42,42,42,0.08)]" />
+          </div>
+
+          {/* labels beneath the cards */}
+          <div className="grid grid-cols-3 gap-4 sm:gap-5 mt-4">
+            <span />
+            <span />
+            <span className="text-center text-[13px] font-semibold text-[#2a2a2a]/60">
+              position animation
+            </span>
+          </div>
+        </div>
       </div>
     </section>
   );
 }
 
 /* ================================================================== */
-/*  ABOUT US SECTION                                                    */
+/*  WHY CHOOSE US                                                      */
 /* ================================================================== */
-function AboutSection() {
-  const { ref, inView } = useInView();
 
+function WhyChooseUsSection() {
   return (
-    <section
-      id="about"
-      ref={ref}
-      className="relative bg-white border-b border-slate-200 py-12 overflow-hidden"
-    >
-      {/* Watermark label + text */}
-      <div className="absolute right-8 top-6 text-right pointer-events-none select-none">
-        <p className="text-xs text-slate-400 font-medium">water mark</p>
-        <p className="text-xs text-slate-400">↓</p>
-        <p className="text-[5rem] font-black text-slate-900 opacity-5 leading-none">Demo</p>
-      </div>
+    <section id="why-us" className="border-b border-[#d5d5e0]">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-16">
+        <SectionTitle>WHY CHOOSE US</SectionTitle>
 
-      <div className="max-w-5xl mx-auto px-6 relative z-10">
-        <div className={`transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-          {/* Section header */}
-          <div className="flex items-center gap-3 mb-3">
-            <span className="text-slate-700 text-xl font-bold">〰→</span>
-            <h2 className="text-3xl font-extrabold text-slate-900">About US</h2>
-          </div>
-          <p className="text-base text-slate-500 ml-10">demo</p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ================================================================== */
-/*  SERVICES SECTION                                                    */
-/* ================================================================== */
-function ServicesSection() {
-  const { ref, inView } = useInView();
-
-  return (
-    <section
-      id="services"
-      ref={ref}
-      className="relative bg-slate-50 border-b border-slate-200 py-12 overflow-hidden"
-    >
-      <div className="max-w-5xl mx-auto px-6 relative z-10">
-        {/* Section header */}
-        <div className={`flex items-center gap-3 mb-8 transition-all duration-500 ${inView ? "opacity-100" : "opacity-0"}`}>
-          <span className="text-slate-700 text-xl font-bold">〰→</span>
-          <h2 className="text-3xl font-extrabold text-slate-900">my services</h2>
-        </div>
-
-        {/* Layout: cards left + labels right */}
-        <div className="flex gap-6 items-start">
-
-          {/* Service Cards — 3 blank white boxes */}
-          <div className="flex gap-4 flex-1">
-            {[0, 1, 2].map((i) => (
-              <div
-                key={i}
-                className={`flex-1 bg-white border border-slate-200 rounded-xl shadow-sm min-h-[140px] transition-all duration-500 hover:shadow-md hover:-translate-y-1 ${
-                  inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-                }`}
-                style={{ transitionDelay: `${i * 120}ms` }}
-              />
+        {/* large grey rectangle with a thin black cross */}
+        <div className="relative mt-8 max-w-3xl">
+          <div className="grid grid-cols-2">
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} className="h-36 sm:h-44 bg-[#c5c6d2] flex items-center justify-center">
+                <span
+                  className="text-[13px] sm:text-sm font-medium text-[#2a2a2a]/60 -rotate-[15deg] leading-tight text-center"
+                >
+                  image കൊടുക്കുക
+                </span>
+              </div>
             ))}
           </div>
 
-          {/* Right labels */}
-          <div className="flex flex-col justify-between text-xs text-slate-400 self-stretch min-w-[120px] py-1">
-            <div>
-              <p className="font-semibold text-slate-500">Arrangement</p>
-              <p>position</p>
-              <p>change to animation</p>
-              <span className="text-slate-400">→</span>
-            </div>
-            <div className="mt-auto text-right">
-              <p className="text-slate-400">water mark →</p>
-              <p className="text-slate-400 mt-4">position</p>
-              <p className="text-slate-400">animation</p>
-            </div>
-          </div>
-        </div>
+          {/* crosshair at the centre */}
+          <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[2px] bg-[#2a2a2a]" />
+          <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[2px] bg-[#2a2a2a]" />
 
-        {/* Watermark arrow label */}
-        <div className="mt-2 flex items-center gap-2 text-slate-300">
-          <span className="text-sm">↓</span>
-          <span className="text-sm">↙</span>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ================================================================== */
-/*  WHY CHOOSE US                                                       */
-/* ================================================================== */
-function WhyChooseUsSection() {
-  const { ref, inView } = useInView();
-
-  return (
-    <section
-      id="why-us"
-      ref={ref}
-      className="bg-white border-b border-slate-200 py-12"
-    >
-      <div className="max-w-5xl mx-auto px-6">
-        {/* Heading */}
-        <div className={`flex items-center gap-3 mb-8 transition-all duration-500 ${inView ? "opacity-100" : "opacity-0"}`}>
-          <span className="text-slate-700 text-xl font-bold">〰〰→</span>
-          <h2 className="text-3xl font-extrabold text-slate-900">WHY CHOOSE US</h2>
-        </div>
-
-        {/* Image grid — large 2x2 with blank gray boxes, small ones overlapping center */}
-        <div
-          className={`relative transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-        >
-          {/* Outer grid */}
-          <div className="grid grid-cols-2 gap-1 bg-slate-300 rounded-xl overflow-hidden">
-            {/* Top-left */}
-            <div className="bg-slate-400 h-48 flex items-center justify-center rounded-tl-xl">
-              <div className="text-center">
-                <p className="text-slate-600 text-sm font-medium italic">image</p>
-                <p className="text-slate-700 font-bold text-sm">കൊടുക്കുക</p>
-              </div>
-            </div>
-            {/* Top-right */}
-            <div className="bg-slate-400 h-48 flex items-center justify-center rounded-tr-xl">
-              <div className="text-center">
-                <p className="text-slate-600 text-sm font-medium italic">image</p>
-                <p className="text-slate-700 font-bold text-sm">കൊടുക്കുക</p>
-              </div>
-            </div>
-            {/* Bottom-left */}
-            <div className="bg-slate-500 h-48 flex items-center justify-center rounded-bl-xl">
-              <div className="text-center">
-                <p className="text-slate-300 text-sm font-medium italic">image</p>
-                <p className="text-slate-200 font-bold text-sm">കൊടുക്കുക</p>
-              </div>
-            </div>
-            {/* Bottom-right */}
-            <div className="bg-slate-500 h-48 flex items-center justify-center rounded-br-xl">
-              <div className="text-center">
-                <p className="text-slate-300 text-sm font-medium italic">image</p>
-                <p className="text-slate-200 font-bold text-sm">കൊടുക്കുക</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Small overlapping boxes in center */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="grid grid-cols-2 gap-1">
-              {[0,1,2,3].map((i) => (
-                <div
-                  key={i}
-                  className="w-14 h-10 bg-slate-200 border border-slate-300 rounded shadow-sm flex items-center justify-center"
-                >
-                  <p className="text-[9px] text-slate-500 italic text-center leading-tight">image<br/>കൊടുക്കുക</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Watermark bottom right */}
-        <div className="mt-2 text-right text-xs text-slate-400 space-y-0.5">
-          <p>Demo</p>
-          <p>water mark</p>
-          <p>→ Demo</p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ================================================================== */
-/*  CONTACT SECTION                                                     */
-/* ================================================================== */
-function ContactSection() {
-  const { ref, inView } = useInView();
-  const [submitted, setSubmitted] = useState(false);
-
-  return (
-    <section
-      id="contact"
-      ref={ref}
-      className="bg-slate-100 border-b border-slate-200 py-12"
-    >
-      <div className="max-w-5xl mx-auto px-6">
-        {/* Heading */}
-        <div className={`flex items-center gap-3 mb-8 transition-all duration-500 ${inView ? "opacity-100" : "opacity-0"}`}>
-          <span className="text-slate-700 text-xl font-bold">〰→</span>
-          <h2 className="text-3xl font-extrabold text-slate-900">contact</h2>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-
-          {/* Left — Cards + Email */}
-          <div className={`space-y-4 transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-            {/* Find us + Call us row */}
-            <div className="grid grid-cols-2 gap-4">
-              {/* Find us */}
-              <div className="bg-white border border-slate-200 rounded-2xl p-5 flex items-center gap-3 shadow-sm hover:border-slate-400 transition-colors">
-                <div className="text-slate-600">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                  </svg>
-                </div>
-                <span className="font-semibold text-slate-800 text-sm">find us</span>
-              </div>
-
-              {/* Call us */}
-              <div className="bg-white border border-slate-200 rounded-2xl p-5 flex items-center gap-3 shadow-sm hover:border-slate-400 transition-colors">
-                <div className="text-slate-600">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                  </svg>
-                </div>
-                <span className="font-bold text-slate-800 text-sm uppercase tracking-wide">CALL US</span>
-              </div>
-            </div>
-
-            {/* Email input row */}
-            <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-              <form
-                suppressHydrationWarning
-                className="flex items-center"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setSubmitted(true);
-                  setTimeout(() => setSubmitted(false), 3000);
-                }}
+          {/* four small white inset squares at the intersection */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 grid grid-cols-2 gap-[2px]">
+            {[0, 1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="w-16 h-12 sm:w-20 sm:h-14 bg-white border border-[#d5d5e0] shadow-sm flex items-center justify-center"
               >
-                {/* Email icon + label */}
-                <div className="flex flex-col items-center justify-center px-4 py-4 border-r border-slate-100 min-w-[64px]">
-                  <svg className="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                  </svg>
-                  <span className="text-[10px] font-bold uppercase text-slate-600 mt-1 tracking-wider">EMAIL</span>
-                </div>
-
-                <input
-                  suppressHydrationWarning
-                  type="email"
-                  required
-                  placeholder="example@gmail.com"
-                  className="flex-1 px-4 py-4 text-sm text-slate-700 placeholder:text-slate-400 outline-none bg-transparent"
-                />
-
-                {submitted && (
-                  <span className="px-4 text-emerald-600 font-bold text-sm">✓ Sent!</span>
-                )}
-              </form>
-            </div>
-          </div>
-
-          {/* Right — Map placeholder */}
-          <div className={`transition-all duration-700 delay-200 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-            <div className="bg-slate-200 border border-slate-300 rounded-2xl overflow-hidden h-48 lg:h-full min-h-[160px] flex items-center justify-center relative">
-              {/* Fake map grid lines */}
-              <svg className="absolute inset-0 w-full h-full opacity-40" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <pattern id="mapgrid" width="24" height="24" patternUnits="userSpaceOnUse">
-                    <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#94a3b8" strokeWidth="0.5"/>
-                  </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#mapgrid)"/>
-                {/* Some fake road lines */}
-                <line x1="0" y1="60" x2="100%" y2="55" stroke="#94a3b8" strokeWidth="3"/>
-                <line x1="80" y1="0" x2="75" y2="100%" stroke="#94a3b8" strokeWidth="2"/>
-                <line x1="0" y1="110" x2="100%" y2="115" stroke="#94a3b8" strokeWidth="4"/>
-                <line x1="160" y1="0" x2="155" y2="100%" stroke="#94a3b8" strokeWidth="2"/>
-                <rect x="85" y="65" width="70" height="40" fill="#b0bec5" rx="2"/>
-                <rect x="30" y="30" width="40" height="25" fill="#b0bec5" rx="2"/>
-                <rect x="170" y="80" width="50" height="30" fill="#b0bec5" rx="2"/>
-              </svg>
-              {/* Pin */}
-              <div className="relative z-10 flex flex-col items-center gap-1">
-                <div className="w-5 h-5 bg-slate-600 rounded-full border-2 border-white shadow-md"/>
+                <span className="text-[7px] sm:text-[8px] text-[#2a2a2a]/60 text-center leading-tight">
+                  image
+                  <br />
+                  കൊടുക്കുക
+                </span>
               </div>
-            </div>
+            ))}
           </div>
+        </div>
 
+        {/* bottom-right */}
+        <div className="mt-8 text-right">
+          <p className="text-2xl font-extrabold text-[#2a2a2a]/85">Demo</p>
+          <p className="text-xs font-medium text-[#2a2a2a]/50 mt-1">water mark → Demo</p>
         </div>
       </div>
     </section>
@@ -449,23 +349,150 @@ function ContactSection() {
 }
 
 /* ================================================================== */
-/*  FOOTER                                                              */
+/*  CONTACT                                                            */
 /* ================================================================== */
+
+function ContactSection() {
+  return (
+    <section id="contact" className="border-b border-[#d5d5e0]">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-16">
+        <SectionTitle>contact</SectionTitle>
+
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+          {/* LEFT — buttons + email row */}
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              {/* find us */}
+              <div className="flex items-center gap-3 bg-white rounded-2xl px-5 py-4 shadow-[0_2px_10px_rgba(42,42,42,0.08)] border border-[#e3e3ec]">
+                <svg
+                  className="w-5 h-5 text-[#2a2a2a]/75 shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.8}
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                </svg>
+                <span className="text-sm font-semibold text-[#2a2a2a]">find us</span>
+              </div>
+
+              {/* CALL US */}
+              <div className="flex items-center gap-3 bg-white rounded-2xl px-5 py-4 shadow-[0_2px_10px_rgba(42,42,42,0.08)] border border-[#e3e3ec]">
+                <svg
+                  className="w-5 h-5 text-[#2a2a2a]/75 shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.8}
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                </svg>
+                <span className="text-sm font-bold uppercase tracking-wide text-[#2a2a2a]">CALL US</span>
+              </div>
+            </div>
+
+            {/* email row */}
+            <div className="flex items-stretch bg-white rounded-2xl shadow-[0_2px_10px_rgba(42,42,42,0.08)] border border-[#e3e3ec] overflow-hidden">
+              <div className="flex flex-col items-center justify-center gap-1 px-4 py-4 border-r border-[#eeeef5] min-w-[64px]">
+                <svg
+                  className="w-5 h-5 text-[#2a2a2a]/75"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.8}
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                </svg>
+                <span className="text-[9px] font-bold uppercase tracking-[0.14em] text-[#2a2a2a]/75">EMAIL</span>
+              </div>
+              <input
+                type="email"
+                defaultValue="example@gmail.com"
+                readOnly
+                aria-label="example@gmail.com"
+                className="flex-1 px-4 text-sm text-[#2a2a2a]/80 bg-transparent outline-none cursor-default"
+              />
+            </div>
+          </div>
+
+          {/* RIGHT — rounded map graphic */}
+          <div className="rounded-2xl border border-[#d9d9e4] overflow-hidden shadow-[0_2px_12px_rgba(42,42,42,0.07)] bg-[#eaecdd]">
+            <svg viewBox="0 0 400 300" className="w-full h-auto block" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              {/* light map base */}
+              <rect width="400" height="300" fill="#eaecdd" />
+
+              {/* river */}
+              <path d="M -20 230 C 60 222 90 150 180 138 C 240 130 300 80 330 -20" fill="none" stroke="#9ec3e3" strokeWidth="26" strokeLinecap="round" />
+              <path d="M -20 230 C 60 222 90 150 180 138 C 240 130 300 80 330 -20" fill="none" stroke="#bcd7ec" strokeWidth="12" strokeLinecap="round" />
+
+              {/* green parks */}
+              <ellipse cx="96" cy="62" rx="52" ry="30" fill="#c3dab4" />
+              <ellipse cx="330" cy="200" rx="60" ry="34" fill="#c3dab4" transform="rotate(-10 330 200)" />
+              <ellipse cx="210" cy="266" rx="46" ry="24" fill="#bfd7b0" />
+              <ellipse cx="60" cy="150" rx="28" ry="16" fill="#c8ddbb" />
+
+              {/* city blocks */}
+              <rect x="120" y="30" width="34" height="24" rx="3" fill="#dcded0" />
+              <rect x="180" y="70" width="26" height="22" rx="3" fill="#dcded0" />
+              <rect x="250" y="150" width="40" height="26" rx="3" fill="#dcded0" />
+              <rect x="40" y="80" width="24" height="30" rx="3" fill="#dcded0" />
+              <rect x="60" y="270" width="30" height="20" rx="3" fill="#dcded0" />
+
+              {/* streets (casing + white core) */}
+              {[
+                [70, 0, 70, 300],
+                [165, 0, 165, 300],
+                [240, 0, 240, 300],
+                [355, 0, 355, 300],
+                [0, 110, 400, 110],
+                [0, 190, 400, 190],
+                [0, 258, 400, 258],
+              ].map((l, idx) => (
+                <g key={idx}>
+                  <line x1={l[0]} y1={l[1]} x2={l[2]} y2={l[3]} stroke="#c9cbbb" strokeWidth="13" />
+                  <line x1={l[0]} y1={l[1]} x2={l[2]} y2={l[3]} stroke="#ffffff" strokeWidth="9" />
+                </g>
+              ))}
+
+              {/* diagonal avenue */}
+              <g>
+                <line x1="0" y1="300" x2="400" y2="20" stroke="#c9cbbb" strokeWidth="13" />
+                <line x1="0" y1="300" x2="400" y2="20" stroke="#ffffff" strokeWidth="9" />
+              </g>
+              <g>
+                <line x1="320" y1="300" x2="400" y2="230" stroke="#c9cbbb" strokeWidth="13" />
+                <line x1="320" y1="300" x2="400" y2="230" stroke="#ffffff" strokeWidth="9" />
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ================================================================== */
+/*  FOOTER                                                             */
+/* ================================================================== */
+
 function Footer() {
   return (
-    <footer className="bg-white border-t border-slate-200 text-slate-700">
-      {/* Main 3-col grid */}
-      <div className="max-w-5xl mx-auto px-6">
-        <div className="grid grid-cols-3 divide-x divide-slate-200 border-b border-slate-200">
+    <footer className="text-[#2a2a2a]">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 sm:divide-x divide-[#d5d5e0] border-b border-[#d5d5e0]">
           {/* Demo 1 */}
-          <div className="py-8 pr-6">
-            <p className="text-xl font-bold text-slate-900">Demo 1</p>
+          <div className="py-8 sm:pr-6">
+            <p className="text-2xl font-extrabold tracking-tight">Demo 1</p>
           </div>
 
           {/* Quick Link */}
-          <div className="py-8 px-6">
-            <p className="text-lg font-bold text-slate-900 mb-3">Quick Link</p>
-            <ul className="space-y-1.5 text-sm text-slate-600">
+          <div className="py-8 sm:px-6">
+            <p className="text-base font-bold mb-4">Quick Link</p>
+            <ul className="space-y-2 text-sm font-medium text-[#2a2a2a]/70">
               {[
                 { label: "Home", href: "#hero" },
                 { label: "About us", href: "#about" },
@@ -473,35 +500,39 @@ function Footer() {
                 { label: "contact", href: "#contact" },
               ].map((l) => (
                 <li key={l.label}>
-                  <a href={l.href} className="hover:text-slate-900 transition-colors">{l.label}</a>
+                  <a href={l.href} className="hover:text-[#2a2a2a] transition-colors">
+                    {l.label}
+                  </a>
                 </li>
               ))}
             </ul>
           </div>
 
           {/* Associate company */}
-          <div className="py-8 pl-6">
-            <p className="text-sm font-bold text-slate-900 leading-snug mb-2">OUR Associate<br/>company</p>
-            <p className="text-sm text-slate-600">nm example<br/>comm</p>
+          <div className="py-8 sm:pl-6">
+            <p className="text-base font-bold">OUR Associate company</p>
+            <p className="mt-4 text-sm font-medium text-[#2a2a2a]/70 leading-relaxed">
+              nm example
+              <br />
+              comm
+            </p>
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className="py-4 text-center text-sm text-slate-500">
-          @ copyright Reserved
-        </div>
+        <div className="py-5 text-center text-sm text-[#2a2a2a]/60">@ copyright Reserved</div>
       </div>
     </footer>
   );
 }
 
 /* ================================================================== */
-/*  PAGE EXPORT                                                         */
+/*  PAGE                                                               */
 /* ================================================================== */
+
 export default function HomePage() {
   return (
     <>
-      <NavigationBar />
+      <Header />
       <main>
         <HeroSection />
         <AboutSection />
