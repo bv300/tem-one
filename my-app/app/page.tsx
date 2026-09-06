@@ -1,349 +1,190 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
 
 /* ------------------------------------------------------------------ */
-/*  Intersection Observer hook for scroll-triggered animations        */
+/*  Intersection Observer hook                                          */
 /* ------------------------------------------------------------------ */
-function useInView(threshold = 0.15) {
+function useInView(threshold = 0.1) {
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
-
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const obs = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          obs.unobserve(el);
-        }
+        if (entry.isIntersecting) { setInView(true); obs.unobserve(el); }
       },
       { threshold }
     );
     obs.observe(el);
     return () => obs.disconnect();
   }, [threshold]);
-
   return { ref, inView };
 }
 
 /* ================================================================== */
-/*  NAVIGATION BAR                                                     */
+/*  NAVIGATION BAR                                                      */
 /* ================================================================== */
 function NavigationBar() {
   const [scrolled, setScrolled] = useState(false);
-
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handler, { passive: true });
-    return () => window.removeEventListener("scroll", handler);
+    const h = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", h, { passive: true });
+    return () => window.removeEventListener("scroll", h);
   }, []);
 
   return (
     <header
-      className={`sticky top-0 z-50 backdrop-blur-md border-b transition-all duration-300 ${
-        scrolled
-          ? "bg-white/95 border-slate-200 shadow-sm"
-          : "bg-white/90 border-slate-200/60"
+      className={`sticky top-0 z-50 border-b transition-all duration-300 ${
+        scrolled ? "bg-white/95 shadow-sm border-slate-200" : "bg-white border-slate-200"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        {/* Brand Logo */}
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-full border-2 border-sky-600 bg-sky-50 text-sky-700 flex items-center justify-center font-black text-lg shadow-sm animate-pulse-glow">
-            D
-          </div>
-          <span className="text-2xl font-bold tracking-tight text-slate-900">
-            Demo <span className="text-sky-600">1</span>
-          </span>
+      <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+        {/* Left: Brand */}
+        <span className="text-3xl font-bold text-slate-900 tracking-tight">Demo 1</span>
+
+        {/* Center: D logo */}
+        <div className="w-10 h-10 rounded-full border-2 border-slate-700 flex items-center justify-center font-bold text-slate-800 text-lg">
+          D
         </div>
 
-        {/* Navigation Links */}
-        <nav className="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
-          <a
-            href="#hero"
-            className="hover:text-sky-600 transition-colors duration-200"
-          >
-            Home
-          </a>
-          <span className="text-slate-300">→</span>
-          <a
-            href="#about"
-            className="hover:text-sky-600 transition-colors duration-200"
-          >
-            About Us
-          </a>
-          <span className="text-slate-300">→</span>
-          <a
-            href="#services"
-            className="hover:text-sky-600 transition-colors duration-200"
-          >
-            Services
-          </a>
-          <span className="text-slate-300">→</span>
-          <a
-            href="#why-us"
-            className="hover:text-sky-600 transition-colors duration-200"
-          >
-            Why Choose Us
-          </a>
-          <span className="text-slate-300">→</span>
-          <a
-            href="#contact"
-            className="hover:text-sky-600 transition-colors duration-200"
-          >
-            Contact
-          </a>
+        {/* Right: Nav links */}
+        <nav className="flex items-center gap-1 text-sm font-medium text-slate-600">
+          <a href="#hero" className="hover:text-slate-900 transition-colors">Home</a>
+          <span className="text-slate-400 mx-1">→</span>
+          <a href="#about" className="hover:text-slate-900 transition-colors">About us</a>
+          <span className="text-slate-400 mx-1">→</span>
+          <a href="#services" className="hover:text-slate-900 transition-colors">service</a>
+          <span className="text-slate-400 mx-1">→</span>
+          <a href="#contact" className="hover:text-slate-900 transition-colors">contact</a>
         </nav>
-
-        {/* CTA Button */}
-        <div className="flex items-center space-x-4">
-          <a
-            href="#contact"
-            className="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-lg font-semibold text-sm shadow-md shadow-sky-600/20 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0"
-          >
-            Get Started
-          </a>
-        </div>
       </div>
     </header>
   );
 }
 
 /* ================================================================== */
-/*  HERO SECTION                                                       */
+/*  HERO SECTION                                                        */
 /* ================================================================== */
 function HeroSection() {
-  const { ref, inView } = useInView(0.1);
-  const pills = [
-    "What is your core business?",
-    "Growth ROI Estimates",
-    "Enterprise Audits",
-  ];
+  const { ref, inView } = useInView(0.05);
 
   return (
     <section
       id="hero"
       ref={ref}
-      className="relative overflow-hidden bg-gradient-to-b from-slate-100 via-white to-slate-50 border-b border-slate-200 py-20 lg:py-28"
+      className="bg-slate-100 border-b border-slate-200 overflow-hidden"
     >
-      {/* Watermark */}
-      <div className="absolute -right-12 top-10 watermark-text text-slate-900 select-none pointer-events-none">
-        DEMO 1
-      </div>
+      <div className="max-w-5xl mx-auto px-6 py-12 grid grid-cols-2 gap-0 items-stretch min-h-[340px]">
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        {/* Left Column */}
-        <div
-          className={`lg:col-span-7 space-y-6 ${
-            inView ? "animate-fade-in-up" : "opacity-0"
-          }`}
-        >
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sky-100 text-sky-800 text-xs font-bold uppercase tracking-wider">
-            <svg
-              className="w-4 h-4 text-sky-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 10V3L4 14h7v7l9-11h-7z"
-              />
-            </svg>
-            Next-Gen Business Accelerators
+        {/* LEFT COLUMN */}
+        <div className={`flex flex-col justify-center space-y-4 pr-8 transition-all duration-700 ${inView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-6"}`}>
+          {/* Arrows scatter */}
+          <div className="relative h-12 w-48">
+            <span className="absolute top-0 left-4 text-slate-600 text-lg font-bold rotate-[-30deg]">↗</span>
+            <span className="absolute top-0 left-10 text-slate-600 text-lg font-bold rotate-[20deg]">↗</span>
+            <span className="absolute top-1 left-16 text-slate-600 text-lg font-bold rotate-[-10deg]">↖</span>
+            <span className="absolute top-0 left-24 text-slate-600 text-lg font-bold rotate-[35deg]">↗</span>
+            <span className="absolute top-2 left-32 text-slate-600 text-lg font-bold rotate-[-25deg]">↙</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight leading-[1.15]">
-            Curious How We Scale Your Enterprise?
+          {/* test label */}
+          <p className="font-black text-slate-800 text-base -mt-2">test</p>
+
+          {/* Malayalam headline */}
+          <h1 className="text-2xl font-extrabold text-slate-900 leading-snug">
+            എന്താണ് ബിസിനസ്സ് അറിയാൻ
           </h1>
 
-          <p className="text-lg text-slate-600 max-w-xl leading-relaxed">
-            Unlocking market potential through targeted keyword growth,
-            strategic positioning, and end-to-end operational intelligence.
-          </p>
-
-          {/* Exploration Pills */}
-          <div className="pt-2">
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-1.5">
-              <span>Frequently explored solutions</span>
-              <span className="text-sky-500">↓</span>
-            </p>
-            <div className="flex flex-wrap gap-2.5">
-              {pills.map((pill, i) => (
-                <span
-                  key={pill}
-                  className={`inline-flex items-center px-3.5 py-2 rounded-xl bg-white border border-slate-200 shadow-sm text-sm font-medium text-slate-700 hover:border-sky-500 hover:text-sky-600 transition cursor-pointer ${
-                    inView ? "animate-slide-right" : "opacity-0"
-                  }`}
-                  style={{ animationDelay: `${300 + i * 120}ms` }}
-                >
-                  {pill}
-                </span>
-              ))}
-            </div>
+          {/* Question marks */}
+          <div className="flex items-center gap-3 text-slate-700">
+            {["↓","↓","↓","↓","↓"].map((a, i) => (
+              <span key={i} className="text-base text-slate-500">{a}</span>
+            ))}
+          </div>
+          <div className="flex items-center gap-4 text-xl font-bold text-slate-700">
+            <span>?</span><span>?</span><span>?</span><span>?</span><span>?</span>
           </div>
         </div>
 
-        {/* Right Column — Strategy Card */}
-        <div
-          className={`lg:col-span-5 relative ${
-            inView ? "animate-fade-in-up delay-200" : "opacity-0"
-          }`}
-        >
-          <div className="relative bg-white p-8 rounded-2xl border border-slate-200/80 shadow-xl overflow-hidden animate-float-up">
-            {/* Chevron overlay */}
-            <div className="absolute -right-8 -top-8 w-36 h-36 chevron-pattern rounded-full opacity-60 pointer-events-none" />
+        {/* RIGHT COLUMN */}
+        <div className={`relative flex flex-col justify-center transition-all duration-700 delay-200 ${inView ? "opacity-100 translate-x-0" : "opacity-0 translate-x-6"}`}>
 
-            <div className="flex items-center justify-between pb-6 border-b border-slate-100">
-              <div className="text-sm font-bold uppercase tracking-wider text-slate-500">
-                Strategic Performance
-              </div>
-              <span className="px-2.5 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-md flex items-center gap-1">
-                ↑ Trending 99.4%
-              </span>
-            </div>
+          {/* Keywords top */}
+          <div className="flex items-end justify-end gap-3 mb-3">
+            {["↑","↑","↑","↑","↑","↑"].map((a,i) => (
+              <span key={i} className="text-slate-600 font-bold text-lg">{a}</span>
+            ))}
+            <span className="text-sm font-semibold text-slate-600 ml-1">keywords</span>
+          </div>
 
-            {/* Keyword Cluster */}
-            <div className="mt-6 space-y-4">
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest text-center">
-                Core Target Keywords
-              </p>
-              <div className="grid grid-cols-2 gap-3 text-center">
-                {[
-                  { label: "Strategy", tag: "High Volume" },
-                  { label: "Conversion", tag: "High Intent" },
-                  { label: "Optimization", tag: "Market Leader" },
-                  { label: "Analytics", tag: "Real-time Insights" },
-                ].map((kw) => (
-                  <div
-                    key={kw.label}
-                    className="p-3 bg-slate-50 border border-slate-200/70 rounded-xl hover:border-sky-400 transition-colors duration-200"
-                  >
-                    <span className="text-sky-600 font-bold block text-base">
-                      ↑ {kw.label}
-                    </span>
-                    <span className="text-xs text-slate-500">{kw.tag}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+          {/* Big Chevron/Arrow shape — striped */}
+          <div className="relative flex items-center justify-center my-2">
+            <svg viewBox="0 0 280 160" className="w-full max-w-xs" xmlns="http://www.w3.org/2000/svg">
+              {/* Striped chevron */}
+              <defs>
+                <pattern id="chevStripe" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(45)">
+                  <rect width="5" height="10" fill="#64748b" opacity="0.5"/>
+                  <rect x="5" width="5" height="10" fill="#94a3b8" opacity="0.2"/>
+                </pattern>
+              </defs>
+              {/* Chevron shape */}
+              <polygon
+                points="0,0 160,0 280,80 160,160 0,160 120,80"
+                fill="url(#chevStripe)"
+                stroke="#475569"
+                strokeWidth="1.5"
+              />
+              {/* Inner outline chevron */}
+              <polygon
+                points="20,20 150,20 250,80 150,140 20,140 130,80"
+                fill="none"
+                stroke="#64748b"
+                strokeWidth="1.5"
+                opacity="0.5"
+              />
+            </svg>
+          </div>
 
-            {/* Chevron Vector */}
-            <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-center gap-2 text-sky-600 font-mono text-sm tracking-widest font-bold">
-              <span>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span>
-              <span className="text-xs text-slate-700 uppercase font-sans tracking-normal font-semibold">
-                Continuous Trajectory
-              </span>
-            </div>
+          {/* Keywords middle right */}
+          <div className="flex items-center justify-end mt-2">
+            <span className="text-sm font-semibold text-slate-600">keywords</span>
           </div>
         </div>
+
       </div>
     </section>
   );
 }
 
 /* ================================================================== */
-/*  ABOUT US SECTION                                                   */
+/*  ABOUT US SECTION                                                    */
 /* ================================================================== */
 function AboutSection() {
   const { ref, inView } = useInView();
-
-  const stats = [
-    { value: "98%", label: "Client Retention" },
-    { value: "12x", label: "Avg. Revenue Lift" },
-    { value: "24/7", label: "Dedicated Support" },
-  ];
 
   return (
     <section
       id="about"
       ref={ref}
-      className="relative py-20 bg-white border-b border-slate-200 overflow-hidden"
+      className="relative bg-white border-b border-slate-200 py-12 overflow-hidden"
     >
-      {/* Watermark */}
-      <div className="absolute right-6 bottom-4 watermark-text text-slate-900 pointer-events-none">
-        Demo
+      {/* Watermark label + text */}
+      <div className="absolute right-8 top-6 text-right pointer-events-none select-none">
+        <p className="text-xs text-slate-400 font-medium">water mark</p>
+        <p className="text-xs text-slate-400">↓</p>
+        <p className="text-[5rem] font-black text-slate-900 opacity-5 leading-none">Demo</p>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="flex items-center space-x-3 mb-6">
-          <span className="text-sky-600 text-2xl font-bold tracking-tighter">
-            〰→
-          </span>
-          <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-            About Us
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div
-            className={`lg:col-span-7 space-y-6 ${
-              inView ? "animate-fade-in-up" : "opacity-0"
-            }`}
-          >
-            <h3 className="text-2xl font-bold text-slate-800 leading-snug">
-              Pioneering Data-Backed Architecture &amp; Transformative
-              Strategies.
-            </h3>
-            <p className="text-slate-600 leading-relaxed">
-              At Demo 1, we combine engineering rigor with high-velocity
-              creative problem solving. Our mission is to dismantle operational
-              bottlenecks, establish authoritative brand visibility, and deliver
-              frictionless customer journeys that convert.
-            </p>
-
-            <div className="grid grid-cols-3 gap-6 pt-4">
-              {stats.map((s, i) => (
-                <div
-                  key={s.label}
-                  className={`border-l-2 border-sky-600 pl-4 ${
-                    inView ? "animate-fade-in-up" : "opacity-0"
-                  }`}
-                  style={{ animationDelay: `${200 + i * 150}ms` }}
-                >
-                  <div className="text-2xl font-black text-slate-900">
-                    {s.value}
-                  </div>
-                  <div className="text-xs font-medium text-slate-500">
-                    {s.label}
-                  </div>
-                </div>
-              ))}
-            </div>
+      <div className="max-w-5xl mx-auto px-6 relative z-10">
+        <div className={`transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+          {/* Section header */}
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-slate-700 text-xl font-bold">〰→</span>
+            <h2 className="text-3xl font-extrabold text-slate-900">About US</h2>
           </div>
-
-          <div
-            className={`lg:col-span-5 ${
-              inView ? "animate-fade-in-up delay-300" : "opacity-0"
-            }`}
-          >
-            <div className="bg-gradient-to-br from-slate-50 to-sky-50/50 p-8 rounded-2xl border border-slate-200 relative">
-              <div className="text-xs font-bold uppercase tracking-widest text-sky-700 mb-2">
-                Our Manifesto
-              </div>
-              <blockquote className="text-slate-700 italic leading-relaxed text-sm">
-                &ldquo;We reject generic frameworks. We decode enterprise
-                problems, align strategic vectors, and construct reliable,
-                automated growth engines.&rdquo;
-              </blockquote>
-              <div className="mt-4 flex items-center space-x-3">
-                <div className="w-9 h-9 rounded-full bg-sky-600 text-white flex items-center justify-center font-bold text-sm">
-                  D1
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-slate-900">
-                    Executive Leadership Team
-                  </p>
-                  <p className="text-[11px] text-slate-500">Demo 1 Group</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <p className="text-base text-slate-500 ml-10">demo</p>
         </div>
       </div>
     </section>
@@ -351,59 +192,8 @@ function AboutSection() {
 }
 
 /* ================================================================== */
-/*  SERVICES SECTION                                                   */
+/*  SERVICES SECTION                                                    */
 /* ================================================================== */
-const services = [
-  {
-    title: "Growth & Search Strategy",
-    description:
-      "Data-driven content clustering, SEO positioning, and continuous optimization pipelines to dominate competitive niches.",
-    cta: "Explore Strategy",
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-        />
-      </svg>
-    ),
-  },
-  {
-    title: "Custom Digital Architecture",
-    description:
-      "Engineered web applications and modular landing solutions designed for blistering speed, accessibility, and high conversions.",
-    cta: "Learn Architecture",
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-        />
-      </svg>
-    ),
-  },
-  {
-    title: "Enterprise Advisory",
-    description:
-      "Hands-on business advisory to align organizational teams, refine sales funnels, and safeguard long-term brand equity.",
-    cta: "Consult With Us",
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-        />
-      </svg>
-    ),
-  },
-];
-
 function ServicesSection() {
   const { ref, inView } = useInView();
 
@@ -411,68 +201,51 @@ function ServicesSection() {
     <section
       id="services"
       ref={ref}
-      className="relative py-24 bg-slate-50 border-b border-slate-200"
+      className="relative bg-slate-50 border-b border-slate-200 py-12 overflow-hidden"
     >
-      {/* Watermark */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 watermark-text text-slate-900 pointer-events-none">
-        WATERMARK
-      </div>
+      <div className="max-w-5xl mx-auto px-6 relative z-10">
+        {/* Section header */}
+        <div className={`flex items-center gap-3 mb-8 transition-all duration-500 ${inView ? "opacity-100" : "opacity-0"}`}>
+          <span className="text-slate-700 text-xl font-bold">〰→</span>
+          <h2 className="text-3xl font-extrabold text-slate-900">my services</h2>
+        </div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
-          <div>
-            <div className="flex items-center space-x-3 mb-2">
-              <span className="text-sky-600 text-2xl font-bold tracking-tighter">
-                〰→
-              </span>
-              <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-                My Services
-              </h2>
-            </div>
-            <p className="text-slate-600 text-sm">
-              Dynamic service arrangements engineered for measurable
-              performance.
-            </p>
+        {/* Layout: cards left + labels right */}
+        <div className="flex gap-6 items-start">
+
+          {/* Service Cards — 3 blank white boxes */}
+          <div className="flex gap-4 flex-1">
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                className={`flex-1 bg-white border border-slate-200 rounded-xl shadow-sm min-h-[140px] transition-all duration-500 hover:shadow-md hover:-translate-y-1 ${
+                  inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+                }`}
+                style={{ transitionDelay: `${i * 120}ms` }}
+              />
+            ))}
           </div>
-          <div className="hidden md:flex items-center space-x-2 text-xs font-semibold text-slate-400 uppercase tracking-widest">
-            <span>Adaptive Architecture</span>
-            <span>⇄</span>
-            <span>Fluid Workflows</span>
+
+          {/* Right labels */}
+          <div className="flex flex-col justify-between text-xs text-slate-400 self-stretch min-w-[120px] py-1">
+            <div>
+              <p className="font-semibold text-slate-500">Arrangement</p>
+              <p>position</p>
+              <p>change to animation</p>
+              <span className="text-slate-400">→</span>
+            </div>
+            <div className="mt-auto text-right">
+              <p className="text-slate-400">water mark →</p>
+              <p className="text-slate-400 mt-4">position</p>
+              <p className="text-slate-400">animation</p>
+            </div>
           </div>
         </div>
 
-        {/* Service Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {services.map((svc, i) => (
-            <div
-              key={svc.title}
-              className={`group bg-white rounded-2xl p-7 border border-slate-200/90 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between ${
-                inView ? "animate-fade-in-up" : "opacity-0"
-              }`}
-              style={{ animationDelay: `${i * 150}ms` }}
-            >
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 mb-5 group-hover:bg-sky-600 group-hover:text-white transition-colors duration-300">
-                  {svc.icon}
-                </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2.5">
-                  {svc.title}
-                </h3>
-                <p className="text-slate-600 text-sm leading-relaxed mb-6">
-                  {svc.description}
-                </p>
-              </div>
-              <a
-                href="#contact"
-                className="inline-flex items-center text-sm font-bold text-sky-600 group-hover:text-sky-700 transition"
-              >
-                {svc.cta}
-                <span className="ml-1.5 transition-transform group-hover:translate-x-1">
-                  →
-                </span>
-              </a>
-            </div>
-          ))}
+        {/* Watermark arrow label */}
+        <div className="mt-2 flex items-center gap-2 text-slate-300">
+          <span className="text-sm">↓</span>
+          <span className="text-sm">↙</span>
         </div>
       </div>
     </section>
@@ -480,39 +253,8 @@ function ServicesSection() {
 }
 
 /* ================================================================== */
-/*  WHY CHOOSE US SECTION                                              */
+/*  WHY CHOOSE US                                                       */
 /* ================================================================== */
-const quadrants = [
-  {
-    tag: "01 / Agility",
-    title: "Uncompromising Velocity",
-    desc: "Rapid prototype-to-production cycles reducing time to market by 45%.",
-    img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
-    alt: "Enterprise Scalability",
-  },
-  {
-    tag: "02 / Quality",
-    title: "Battle-Tested Solutions",
-    desc: "Robust architectures verified through rigorous load profiling and validation.",
-    img: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80",
-    alt: "Performance Intelligence",
-  },
-  {
-    tag: "03 / Security",
-    title: "Comprehensive Security",
-    desc: "End-to-end encryption protocols adhering to premier global governance benchmarks.",
-    img: "https://images.unsplash.com/photo-1563986768609-322da13575f2?w=800&q=80",
-    alt: "Data Security",
-  },
-  {
-    tag: "04 / Synergy",
-    title: "Direct Strategic Partnership",
-    desc: "Collaborating as a direct extension of your leadership and product engineering core.",
-    img: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80",
-    alt: "Client Alignment",
-  },
-];
-
 function WhyChooseUsSection() {
   const { ref, inView } = useInView();
 
@@ -520,50 +262,71 @@ function WhyChooseUsSection() {
     <section
       id="why-us"
       ref={ref}
-      className="py-24 bg-white border-b border-slate-200"
+      className="bg-white border-b border-slate-200 py-12"
     >
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center space-x-3 mb-10">
-          <span className="text-sky-600 text-2xl font-bold tracking-tighter">
-            〰→
-          </span>
-          <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-            WHY CHOOSE US
-          </h2>
+      <div className="max-w-5xl mx-auto px-6">
+        {/* Heading */}
+        <div className={`flex items-center gap-3 mb-8 transition-all duration-500 ${inView ? "opacity-100" : "opacity-0"}`}>
+          <span className="text-slate-700 text-xl font-bold">〰〰→</span>
+          <h2 className="text-3xl font-extrabold text-slate-900">WHY CHOOSE US</h2>
         </div>
 
-        {/* 2×2 Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {quadrants.map((q, i) => (
-            <div
-              key={q.tag}
-              className={`relative overflow-hidden rounded-2xl bg-slate-900 text-white p-8 group min-h-[260px] flex flex-col justify-end ${
-                inView ? "animate-fade-in-up" : "opacity-0"
-              }`}
-              style={{ animationDelay: `${i * 120}ms` }}
-            >
-              <Image
-                src={q.img}
-                alt={q.alt}
-                fill
-                className="object-cover opacity-35 group-hover:scale-105 transition-transform duration-500"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-              <div className="relative z-10 space-y-2">
-                <span className="px-2.5 py-1 rounded bg-sky-500/30 text-sky-300 text-xs font-bold uppercase tracking-wider border border-sky-400/30">
-                  {q.tag}
-                </span>
-                <h3 className="text-2xl font-bold">{q.title}</h3>
-                <p className="text-sm text-slate-300 max-w-md">{q.desc}</p>
+        {/* Image grid — large 2x2 with blank gray boxes, small ones overlapping center */}
+        <div
+          className={`relative transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+        >
+          {/* Outer grid */}
+          <div className="grid grid-cols-2 gap-1 bg-slate-300 rounded-xl overflow-hidden">
+            {/* Top-left */}
+            <div className="bg-slate-400 h-48 flex items-center justify-center rounded-tl-xl">
+              <div className="text-center">
+                <p className="text-slate-600 text-sm font-medium italic">image</p>
+                <p className="text-slate-700 font-bold text-sm">കൊടുക്കുക</p>
               </div>
             </div>
-          ))}
+            {/* Top-right */}
+            <div className="bg-slate-400 h-48 flex items-center justify-center rounded-tr-xl">
+              <div className="text-center">
+                <p className="text-slate-600 text-sm font-medium italic">image</p>
+                <p className="text-slate-700 font-bold text-sm">കൊടുക്കുക</p>
+              </div>
+            </div>
+            {/* Bottom-left */}
+            <div className="bg-slate-500 h-48 flex items-center justify-center rounded-bl-xl">
+              <div className="text-center">
+                <p className="text-slate-300 text-sm font-medium italic">image</p>
+                <p className="text-slate-200 font-bold text-sm">കൊടുക്കുക</p>
+              </div>
+            </div>
+            {/* Bottom-right */}
+            <div className="bg-slate-500 h-48 flex items-center justify-center rounded-br-xl">
+              <div className="text-center">
+                <p className="text-slate-300 text-sm font-medium italic">image</p>
+                <p className="text-slate-200 font-bold text-sm">കൊടുക്കുക</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Small overlapping boxes in center */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="grid grid-cols-2 gap-1">
+              {[0,1,2,3].map((i) => (
+                <div
+                  key={i}
+                  className="w-14 h-10 bg-slate-200 border border-slate-300 rounded shadow-sm flex items-center justify-center"
+                >
+                  <p className="text-[9px] text-slate-500 italic text-center leading-tight">image<br/>കൊടുക്കുക</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div className="mt-4 text-right">
-          <span className="text-xs text-slate-400 font-mono tracking-wider">
-            Demo Watermark → Demo
-          </span>
+        {/* Watermark bottom right */}
+        <div className="mt-2 text-right text-xs text-slate-400 space-y-0.5">
+          <p>Demo</p>
+          <p>water mark</p>
+          <p>→ Demo</p>
         </div>
       </div>
     </section>
@@ -571,7 +334,7 @@ function WhyChooseUsSection() {
 }
 
 /* ================================================================== */
-/*  CONTACT SECTION                                                    */
+/*  CONTACT SECTION                                                     */
 /* ================================================================== */
 function ContactSection() {
   const { ref, inView } = useInView();
@@ -581,176 +344,104 @@ function ContactSection() {
     <section
       id="contact"
       ref={ref}
-      className="py-24 bg-slate-100/70 border-b border-slate-200"
+      className="bg-slate-100 border-b border-slate-200 py-12"
     >
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center space-x-3 mb-12">
-          <span className="text-sky-600 text-2xl font-bold tracking-tighter">
-            〰→
-          </span>
-          <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-            Contact
-          </h2>
+      <div className="max-w-5xl mx-auto px-6">
+        {/* Heading */}
+        <div className={`flex items-center gap-3 mb-8 transition-all duration-500 ${inView ? "opacity-100" : "opacity-0"}`}>
+          <span className="text-slate-700 text-xl font-bold">〰→</span>
+          <h2 className="text-3xl font-extrabold text-slate-900">contact</h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left — Contact Info */}
-          <div
-            className={`lg:col-span-6 space-y-6 ${
-              inView ? "animate-fade-in-up" : "opacity-0"
-            }`}
-          >
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Find Us */}
-              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-sky-500 transition-colors duration-200 flex items-start space-x-4">
-                <div className="p-3 bg-sky-50 text-sky-600 rounded-xl">
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+
+          {/* Left — Cards + Email */}
+          <div className={`space-y-4 transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+            {/* Find us + Call us row */}
+            <div className="grid grid-cols-2 gap-4">
+              {/* Find us */}
+              <div className="bg-white border border-slate-200 rounded-2xl p-5 flex items-center gap-3 shadow-sm hover:border-slate-400 transition-colors">
+                <div className="text-slate-600">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                   </svg>
                 </div>
-                <div>
-                  <h3 className="text-sm font-bold uppercase text-slate-900 tracking-wide">
-                    Find Us
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                    100 Innovation Parkway,
-                    <br />
-                    Tech District, CA 94107
-                  </p>
-                </div>
+                <span className="font-semibold text-slate-800 text-sm">find us</span>
               </div>
 
-              {/* Call Us */}
-              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-sky-500 transition-colors duration-200 flex items-start space-x-4">
-                <div className="p-3 bg-sky-50 text-sky-600 rounded-xl">
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                    />
+              {/* Call us */}
+              <div className="bg-white border border-slate-200 rounded-2xl p-5 flex items-center gap-3 shadow-sm hover:border-slate-400 transition-colors">
+                <div className="text-slate-600">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                   </svg>
                 </div>
-                <div>
-                  <h3 className="text-sm font-bold uppercase text-slate-900 tracking-wide">
-                    Call Us
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                    +1 (800) 555-DEMO
-                    <br />
-                    Mon - Fri, 9am - 6pm EST
-                  </p>
-                </div>
+                <span className="font-bold text-slate-800 text-sm uppercase tracking-wide">CALL US</span>
               </div>
             </div>
 
-            {/* Email Form */}
-            <div className="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm">
+            {/* Email input row */}
+            <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
               <form
-                className="flex flex-col sm:flex-row items-center gap-2"
+                suppressHydrationWarning
+                className="flex items-center"
                 onSubmit={(e) => {
                   e.preventDefault();
                   setSubmitted(true);
                   setTimeout(() => setSubmitted(false), 3000);
                 }}
               >
-                <div className="flex items-center px-3 text-slate-400">
-                  <svg
-                    className="w-5 h-5 text-sky-600 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                    />
+                {/* Email icon + label */}
+                <div className="flex flex-col items-center justify-center px-4 py-4 border-r border-slate-100 min-w-[64px]">
+                  <svg className="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                   </svg>
-                  <span className="text-xs font-bold uppercase text-slate-700">
-                    EMAIL
-                  </span>
+                  <span className="text-[10px] font-bold uppercase text-slate-600 mt-1 tracking-wider">EMAIL</span>
                 </div>
+
                 <input
+                  suppressHydrationWarning
                   type="email"
                   required
                   placeholder="example@gmail.com"
-                  className="flex-1 w-full bg-slate-50 border-0 focus:ring-2 focus:ring-sky-500 rounded-xl text-sm px-4 py-3 placeholder:text-slate-400 outline-none"
+                  className="flex-1 px-4 py-4 text-sm text-slate-700 placeholder:text-slate-400 outline-none bg-transparent"
                 />
-                <button
-                  type="submit"
-                  className={`w-full sm:w-auto px-6 py-3 rounded-xl text-sm font-bold transition duration-200 shadow-md ${
-                    submitted
-                      ? "bg-emerald-600 text-white"
-                      : "bg-slate-900 hover:bg-sky-600 text-white"
-                  }`}
-                >
-                  {submitted ? "✓ Sent!" : "Send Inquiry"}
-                </button>
+
+                {submitted && (
+                  <span className="px-4 text-emerald-600 font-bold text-sm">✓ Sent!</span>
+                )}
               </form>
             </div>
           </div>
 
-          {/* Right — Map */}
-          <div
-            className={`lg:col-span-6 ${
-              inView ? "animate-fade-in-up delay-200" : "opacity-0"
-            }`}
-          >
-            <div className="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group">
-              <div className="relative h-64 sm:h-72 w-full rounded-xl overflow-hidden bg-slate-200">
-                <Image
-                  src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&q=80"
-                  alt="Corporate Location Map"
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-
-                {/* Pin Marker */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="relative flex items-center justify-center">
-                    <span className="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-sky-400 opacity-75" />
-                    <div className="relative w-6 h-6 bg-sky-600 text-white rounded-full border-2 border-white shadow-lg flex items-center justify-center">
-                      <div className="w-1.5 h-1.5 bg-white rounded-full" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm">
-                  <p className="text-xs font-bold text-slate-800">
-                    Global Tech Center
-                  </p>
-                  <p className="text-[10px] text-slate-500">
-                    Live Navigation Enabled
-                  </p>
-                </div>
+          {/* Right — Map placeholder */}
+          <div className={`transition-all duration-700 delay-200 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+            <div className="bg-slate-200 border border-slate-300 rounded-2xl overflow-hidden h-48 lg:h-full min-h-[160px] flex items-center justify-center relative">
+              {/* Fake map grid lines */}
+              <svg className="absolute inset-0 w-full h-full opacity-40" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <pattern id="mapgrid" width="24" height="24" patternUnits="userSpaceOnUse">
+                    <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#94a3b8" strokeWidth="0.5"/>
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#mapgrid)"/>
+                {/* Some fake road lines */}
+                <line x1="0" y1="60" x2="100%" y2="55" stroke="#94a3b8" strokeWidth="3"/>
+                <line x1="80" y1="0" x2="75" y2="100%" stroke="#94a3b8" strokeWidth="2"/>
+                <line x1="0" y1="110" x2="100%" y2="115" stroke="#94a3b8" strokeWidth="4"/>
+                <line x1="160" y1="0" x2="155" y2="100%" stroke="#94a3b8" strokeWidth="2"/>
+                <rect x="85" y="65" width="70" height="40" fill="#b0bec5" rx="2"/>
+                <rect x="30" y="30" width="40" height="25" fill="#b0bec5" rx="2"/>
+                <rect x="170" y="80" width="50" height="30" fill="#b0bec5" rx="2"/>
+              </svg>
+              {/* Pin */}
+              <div className="relative z-10 flex flex-col items-center gap-1">
+                <div className="w-5 h-5 bg-slate-600 rounded-full border-2 border-white shadow-md"/>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
@@ -758,76 +449,46 @@ function ContactSection() {
 }
 
 /* ================================================================== */
-/*  FOOTER                                                             */
+/*  FOOTER                                                              */
 /* ================================================================== */
 function Footer() {
   return (
-    <footer className="bg-white border-t border-slate-200 text-slate-600">
-      <div className="max-w-7xl mx-auto px-6 py-14">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start border-b border-slate-100 pb-12">
-          {/* Brand */}
-          <div className="md:col-span-4 space-y-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-full border border-sky-600 bg-sky-50 text-sky-700 flex items-center justify-center font-bold text-sm">
-                D
-              </div>
-              <span className="text-xl font-bold text-slate-900">Demo 1</span>
-            </div>
-            <p className="text-sm text-slate-500 leading-relaxed max-w-sm">
-              Setting benchmarks in enterprise digital growth, keyword strategy,
-              and frictionless systems engineering.
-            </p>
+    <footer className="bg-white border-t border-slate-200 text-slate-700">
+      {/* Main 3-col grid */}
+      <div className="max-w-5xl mx-auto px-6">
+        <div className="grid grid-cols-3 divide-x divide-slate-200 border-b border-slate-200">
+          {/* Demo 1 */}
+          <div className="py-8 pr-6">
+            <p className="text-xl font-bold text-slate-900">Demo 1</p>
           </div>
 
-          {/* Quick Links */}
-          <div className="md:col-span-4 space-y-3">
-            <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
-              Quick Links
-            </h4>
-            <ul className="space-y-2 text-sm">
+          {/* Quick Link */}
+          <div className="py-8 px-6">
+            <p className="text-lg font-bold text-slate-900 mb-3">Quick Link</p>
+            <ul className="space-y-1.5 text-sm text-slate-600">
               {[
-                { label: "Home Overview", href: "#hero" },
-                { label: "About Our Firm", href: "#about" },
-                { label: "Specialized Services", href: "#services" },
-                { label: "Why Choose Demo 1", href: "#why-us" },
-                { label: "Get In Touch", href: "#contact" },
-              ].map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="hover:text-sky-600 transition"
-                  >
-                    {link.label}
-                  </a>
+                { label: "Home", href: "#hero" },
+                { label: "About us", href: "#about" },
+                { label: "service", href: "#services" },
+                { label: "contact", href: "#contact" },
+              ].map((l) => (
+                <li key={l.label}>
+                  <a href={l.href} className="hover:text-slate-900 transition-colors">{l.label}</a>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Associate Company */}
-          <div className="md:col-span-4 space-y-3">
-            <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
-              Our Associate Company
-            </h4>
-            <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
-              <p className="text-sm font-semibold text-slate-800">
-                NM Example Communications Group
-              </p>
-              <p className="text-xs text-slate-500">
-                Global affiliate in media distribution, syndication, and network
-                communications.
-              </p>
-              <div className="text-xs font-bold text-sky-600 pt-1">
-                nm.example.comm
-              </div>
-            </div>
+          {/* Associate company */}
+          <div className="py-8 pl-6">
+            <p className="text-sm font-bold text-slate-900 leading-snug mb-2">OUR Associate<br/>company</p>
+            <p className="text-sm text-slate-600">nm example<br/>comm</p>
           </div>
         </div>
 
         {/* Copyright */}
-        <div className="pt-8 text-center text-xs text-slate-400 font-medium">
-          © {new Date().getFullYear()} Demo 1. All Rights Reserved. Designed
-          from technical specification blueprint.
+        <div className="py-4 text-center text-sm text-slate-500">
+          @ copyright Reserved
         </div>
       </div>
     </footer>
@@ -835,7 +496,7 @@ function Footer() {
 }
 
 /* ================================================================== */
-/*  PAGE EXPORT                                                        */
+/*  PAGE EXPORT                                                         */
 /* ================================================================== */
 export default function HomePage() {
   return (
