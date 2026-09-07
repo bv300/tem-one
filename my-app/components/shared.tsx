@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import "./shared.css";
 
-export const INK = "#2a2a2a";
+export const INK = "#0B2545";
 
 export function SketchArrow({
   x1,
@@ -118,9 +118,7 @@ export function SectionTitle({ children }: { children: ReactNode }) {
   return (
     <div className="section-title-wrapper">
       <WavyArrow className="section-title-icon" />
-      <h2 className="section-title-text">
-        {children}
-      </h2>
+      <h2 className="section-title-text">{children}</h2>
     </div>
   );
 }
