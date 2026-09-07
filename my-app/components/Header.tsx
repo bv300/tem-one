@@ -3,10 +3,7 @@ import "./Header.css";
 export function WireframeHeader() {
   return (
     <header className="header">
-      {/* Circular D badge */}
-      <div className="header-badge">
-        <span>D</span>
-      </div>
+
 
       <div className="header-content">
         {/* Large heading */}

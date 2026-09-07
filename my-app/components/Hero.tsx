@@ -16,13 +16,13 @@ const BURST: {
   r: number;
   bend: number;
 }[] = [
-  { dx: -0.78, dy: -0.62, r0: 34, r: 105, bend: -3 },
-  { dx: -0.43, dy: -0.9, r0: 34, r: 82, bend: 2.5 },
-  { dx: 0.82, dy: -0.57, r0: 34, r: 112, bend: -2 },
-  { dx: 1.0, dy: 0.02, r0: 42, r: 100, bend: 3 },
-  { dx: -0.85, dy: 0.52, r0: 34, r: 100, bend: -2.5 },
-  { dx: 0.82, dy: 0.57, r0: 34, r: 84, bend: 2 },
-];
+    { dx: -0.78, dy: -0.62, r0: 34, r: 105, bend: -3 },
+    { dx: -0.43, dy: -0.9, r0: 34, r: 82, bend: 2.5 },
+    { dx: 0.82, dy: -0.57, r0: 34, r: 112, bend: -2 },
+    { dx: 1.0, dy: 0.02, r0: 42, r: 100, bend: 3 },
+    { dx: -0.85, dy: 0.52, r0: 34, r: 100, bend: -2.5 },
+    { dx: 0.82, dy: 0.57, r0: 34, r: 84, bend: 2 },
+  ];
 const BURST_CX = 207;
 const BURST_CY = 83;
 
@@ -44,38 +44,20 @@ export function WireframeHero() {
         strokeWidth={2}
       />
 
-      {/* ---- central chevron band (thin black outline, white core) ---- */}
-      <path d={BAND_PATH} fill="none" stroke={INK} strokeWidth={16} strokeLinejoin="miter" />
-      <path d={BAND_PATH} fill="none" stroke="#ffffff" strokeWidth={12} strokeLinejoin="miter" />
-      {TOP_CHEVRONS.map((t) => (
-        <DoubleChevron
-          key={`t-${t}`}
-          x={TOP_RUN.sx + TOP_RUN.ux * t}
-          y={TOP_RUN.sy + TOP_RUN.uy * t}
-          rotate={TOP_RUN.rotate}
-          scale={0.5}
-        />
-      ))}
-      {BOT_CHEVRONS.map((t) => (
-        <DoubleChevron
-          key={`b-${t}`}
-          x={BOT_RUN.sx + BOT_RUN.ux * t}
-          y={BOT_RUN.sy + BOT_RUN.uy * t}
-          rotate={BOT_RUN.rotate}
-          scale={0.5}
-        />
-      ))}
+      {/* ---- central chevron band (decreased width, no small arrows) ---- */}
+      <path d={BAND_PATH} fill="none" stroke={INK} strokeWidth={6} strokeLinejoin="miter" />
+      <path d={BAND_PATH} fill="none" stroke="#ffffff" strokeWidth={2} strokeLinejoin="miter" />
 
-      {/* Left Image Placeholder (Touching the arrow line) */}
-      <rect x={120} y={60} width={320} height={220} rx={16} fill="#f1f2f6" stroke="#c9cad6" strokeWidth={2} strokeDasharray="8 8" />
-      <text x={280} y={175} textAnchor="middle" fontSize={22} fontWeight={600} fill={INK} opacity={0.5} style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-        Image Option
+      {/* Left Image Placeholder (Exactly matching the bent arrow path) */}
+      <polygon points="0,0 442,0 587,222 530,352 0,352" fill="#f1f2f6" stroke="#c9cad6" strokeWidth={2} strokeDasharray="8 8" />
+      <text x={240} y={176} textAnchor="middle" fontSize={22} fontWeight={600} fill={INK} opacity={0.5} style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        Left Image
       </text>
 
-      {/* Right Image Placeholder (Touching the arrow line) */}
-      <rect x={620} y={60} width={320} height={220} rx={16} fill="#f1f2f6" stroke="#c9cad6" strokeWidth={2} strokeDasharray="8 8" />
-      <text x={780} y={175} textAnchor="middle" fontSize={22} fontWeight={600} fill={INK} opacity={0.5} style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-        Image Option
+      {/* Right Image Placeholder (Exactly matching the bent arrow path) */}
+      <polygon points="448,0 1008,0 1008,352 536,352 593,222" fill="#f1f2f6" stroke="#c9cad6" strokeWidth={2} strokeDasharray="8 8" />
+      <text x={760} y={176} textAnchor="middle" fontSize={22} fontWeight={600} fill={INK} opacity={0.5} style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        Right Image
       </text>
     </svg>
   );
