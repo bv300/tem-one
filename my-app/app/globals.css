@@ -1,37 +1,40 @@
-@import "tailwindcss";
-
-:root {
-  --background: #E8E8F2;
-  --foreground: #2a2a2a;
+/* CSS Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
-
-html {
-  scroll-behavior: smooth;
-}
-
+html, body { height: 100%; }
 body {
-  background: var(--background);
-  color: var(--foreground);
   font-family: "Plus Jakarta Sans", "Inter", sans-serif;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  background-color: #ffffff;
+  color: #2a2a2a;
+}
+img, picture, video, canvas, svg { display: block; max-width: 100%; }
+input, button, textarea, select { font: inherit; outline: none; border: none; }
+a { text-decoration: none; color: inherit; }
+ul, ol { list-style: none; }
+html { scroll-behavior: smooth; }
+
+/* Variables */
+:root {
+  --ink: #2a2a2a;
+  --ink-70: rgba(42, 42, 42, 0.7);
+  --ink-60: rgba(42, 42, 42, 0.6);
+  --ink-40: rgba(42, 42, 42, 0.4);
+  --border-light: #d5d5e0;
 }
 
-::selection {
-  background: #475569;
-  color: white;
+/* Base Utility Classes */
+.font-malayalam {
+  font-family: var(--font-malayalam), "Noto Sans Malayalam", sans-serif;
 }
-
-/* Scrollbar */
+::selection { background: #475569; color: white; }
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #f1f5f9; }
 ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 9999px; }
 ::-webkit-scrollbar-thumb:hover { background: #64748b; }
-
-/* Fade-in-up animation */
-@keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.animate-fade-in-up {
-  animation: fade-in-up 0.6s ease-out both;
-}
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

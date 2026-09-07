@@ -1,5 +1,13 @@
 import type { Metadata } from "next";
+import { Noto_Sans_Malayalam } from "next/font/google";
 import "./globals.css";
+
+const malayalam = Noto_Sans_Malayalam({
+  subsets: ["malayalam"],
+  weight: ["400", "600", "700"],
+  variable: "--font-malayalam",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Demo 1 - Modern Digital Solutions & Strategy",
@@ -9,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className="h-full antialiased">
+    <html lang="en" className={`h-full antialiased ${malayalam.variable}`}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
