@@ -9,6 +9,7 @@ export function WireframeHero() {
     <svg
       viewBox="0 0 1008 406"
       className="hero-svg"
+      preserveAspectRatio="xMidYMid slice"
       role="img"
       aria-label="Hero banner with two images split by a diagonal line"
     >

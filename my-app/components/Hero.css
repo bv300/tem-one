@@ -1,4 +1,4 @@
 /* Hero */
-.hero-section { display: block; padding-top: 4.375rem; }
-.hero-svg { display: block; width: 100%; height: auto; }
-@media (min-width: 768px) { .hero-section { padding-top: 0; } }
+.hero-section { display: block; }
+.hero-svg { display: block; width: 100%; height: clamp(25rem, 80vw, 36rem); }
+@media (min-width: 1024px) { .hero-svg { height: auto; } }
