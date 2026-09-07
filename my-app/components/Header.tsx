@@ -14,11 +14,8 @@ export function WireframeHeader() {
         {/* Navigation breadcrumb */}
         <nav className="header-nav">
           <a href="#hero">Home</a>
-          <span className="nav-arrow">→</span>
           <a href="#about">About us</a>
-          <span className="nav-arrow">→</span>
           <a href="#services">service</a>
-          <span className="nav-arrow">→</span>
           <a href="#contact">contact</a>
         </nav>
       </div>

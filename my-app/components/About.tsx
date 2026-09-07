@@ -7,8 +7,6 @@ export function AboutSection() {
       <div className="about-container">
         {/* watermark, top-right */}
         <div className="watermark">
-          <p className="watermark-label">water mark</p>
-          <p className="watermark-arrow">↓</p>
           <p className="watermark-text">
             Demo
           </p>

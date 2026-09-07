@@ -7,8 +7,8 @@
 .watermark-label { font-size: 11px; font-weight: 500; color: rgba(42, 42, 42, 0.4); }
 @media (min-width: 640px) { .watermark-label { font-size: 0.75rem; } }
 .watermark-arrow { font-size: 11px; color: rgba(42, 42, 42, 0.35); margin-top: 2px; }
-.watermark-text { font-size: 72px; font-weight: 900; line-height: 1; color: rgba(42, 42, 42, 0.06); margin-top: 4px; }
-@media (min-width: 640px) { .watermark-text { font-size: 96px; } }
+.watermark-text { font-size: 48px; font-weight: 900; line-height: 1; color: rgba(42, 42, 42, 0.06); margin-top: 4px; }
+@media (min-width: 640px) { .watermark-text { font-size: 64px; } }
 .about-content { position: relative; z-index: 10; }
 .about-description { margin-top: 0.5rem; margin-left: 3rem; font-size: 1rem; font-weight: 600; color: var(--ink-70); }
 @media (min-width: 640px) { .about-description { margin-left: 60px; font-size: 1.125rem; } }
