@@ -56,6 +56,7 @@ export function WireframeHero() {
 
       {/* central chevron band */}
       <path
+        className="hero-band"
         d={BAND_PATH}
         fill="none"
         stroke={INK}
@@ -63,6 +64,7 @@ export function WireframeHero() {
         strokeLinejoin="miter"
       />
       <path
+        className="hero-band hero-band-highlight"
         d={BAND_PATH}
         fill="none"
         stroke="#F7F9FC"

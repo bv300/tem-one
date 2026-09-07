@@ -1,4 +1,5 @@
 import { SectionTitle } from "./shared";
+import { ScrollReveal } from "./ScrollReveal";
 import "./About.css";
 
 export function AboutSection() {
@@ -7,12 +8,10 @@ export function AboutSection() {
       <div className="about-container">
         {/* watermark, top-right */}
         <div className="watermark">
-          <p className="watermark-text">
-            Demo
-          </p>
+          <p className="watermark-text">Demo</p>
         </div>
 
-        <div className="about-grid">
+        <ScrollReveal className="about-grid" variant="fade-up" duration="slow">
           {/* Left Side: Overlapping Images */}
           <div className="about-images">
             <div className="about-img about-img-1">
@@ -35,14 +34,14 @@ export function AboutSection() {
           <div className="about-content">
             <SectionTitle>About US</SectionTitle>
             <p className="about-description">
-              Welcome to our platform. We specialize in delivering high-quality 
-              solutions tailored to your specific needs. Our expert team combines 
-              creativity and technology to build modern, scalable, and beautifully 
-              designed web experiences.
+              Welcome to our platform. We specialize in delivering high-quality
+              solutions tailored to your specific needs. Our expert team
+              combines creativity and technology to build modern, scalable, and
+              beautifully designed web experiences.
             </p>
             <button className="about-btn">Discover More</button>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

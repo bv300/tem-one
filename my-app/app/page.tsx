@@ -11,6 +11,8 @@ import { ServicesSection } from "../components/Services";
 import { WhyChooseUsSection } from "../components/WhyChooseUs";
 import { ContactSection } from "../components/Contact";
 import { Footer } from "../components/Footer";
+import { TopButton } from "../components/shared";
+import { ScrollReveal } from "../components/ScrollReveal";
 
 /* ------------------------------------------------------------------ */
 /*  Page                                                               */
@@ -23,7 +25,13 @@ export default function HomePage() {
         <WireframeHeader />
 
         <section id="hero" className="hero-section">
-          <WireframeHero />
+          <ScrollReveal
+            className="hero-reveal"
+            variant="fade-down"
+            duration="slow"
+          >
+            <WireframeHero />
+          </ScrollReveal>
         </section>
 
         <AboutSection />
@@ -31,6 +39,7 @@ export default function HomePage() {
         <WhyChooseUsSection />
         <ContactSection />
         <Footer />
+        <TopButton />
       </div>
     </main>
   );

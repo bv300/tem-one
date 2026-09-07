@@ -1,4 +1,5 @@
 import { SectionTitle } from "./shared";
+import { ScrollReveal } from "./ScrollReveal";
 import "./WhyChooseUs.css";
 
 export function WhyChooseUsSection() {
@@ -8,16 +9,20 @@ export function WhyChooseUsSection() {
         <SectionTitle>WHY CHOOSE US</SectionTitle>
 
         {/* large gray content grid split by a thin black cross */}
-        <div className="wcu-grid-wrapper">
+        <ScrollReveal className="wcu-grid-wrapper" variant="fade-right">
           <div className="wcu-main-grid">
             {[
               "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80",
               "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=600&q=80",
               "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80",
-              "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80"
+              "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80",
             ].map((src, i) => (
               <div key={i} className="wcu-grid-item">
-                <img src={src} alt="Feature highlight" className="wcu-grid-img" />
+                <img
+                  src={src}
+                  alt="Feature highlight"
+                  className="wcu-grid-img"
+                />
               </div>
             ))}
           </div>
@@ -34,7 +39,7 @@ export function WhyChooseUsSection() {
               </div>
             ))}
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

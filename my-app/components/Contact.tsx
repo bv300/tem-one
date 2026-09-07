@@ -1,4 +1,5 @@
 import { SectionTitle } from "./shared";
+import { ScrollReveal } from "./ScrollReveal";
 import "./Contact.css";
 
 export function ContactSection() {
@@ -15,7 +16,7 @@ export function ContactSection() {
           </div>
         </div>
 
-        <div className="contact-content">
+        <ScrollReveal className="contact-content" variant="fade-up">
           <div className="contact-grid-layout">
             {/* Left Column: Email & Buttons */}
             <div className="contact-left-col">
@@ -311,7 +312,7 @@ export function ContactSection() {
               </div>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

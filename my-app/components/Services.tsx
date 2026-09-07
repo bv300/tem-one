@@ -1,4 +1,5 @@
 import { SectionTitle } from "./shared";
+import { ScrollReveal } from "./ScrollReveal";
 import "./Services.css";
 
 export function ServicesSection() {
@@ -11,7 +12,7 @@ export function ServicesSection() {
         </div>
 
         {/* stacked card swapping animation */}
-        <div className="services-content-wrapper">
+        <ScrollReveal className="services-content-wrapper" variant="zoom-in">
           <div className="services-stacked-rows">
             {/* Row 1 */}
             <div className="stacked-deck">
@@ -39,7 +40,7 @@ export function ServicesSection() {
               ))}
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );
